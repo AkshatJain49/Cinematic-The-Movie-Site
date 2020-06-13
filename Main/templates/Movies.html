@@ -1,0 +1,155 @@
+{% extends 'Base.html' %}
+{% block content %}
+{% load static %}
+
+
+<section class="text-gray-500 bg-gray-900 body-font">
+  <div class="container px-5 py-10 mx-auto">
+    <div class="flex flex-col text-center w-full mb-12">
+      <h1 class="sm:text-3xl text-2xl font-medium title-font mb-1 text-white">Welcome.</h1>
+      <h2 class="sm:text-3xl text-2xl font-small title-font text-base">Lots of movies, TV shows and people to discover. Explore now.</p>
+    </div>
+    <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:px-0">
+      <input class="flex-grow w-full bg-gray-800 rounded border border-gray-700 text-white focus:outline-none focus:border-indigo-500 text-base px-4 py-2 mr-4 mb-4 sm:mb-0" placeholder="Enter Movie Title" type="search" id="search">
+      <button class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" onclick="Search()">Search</button>
+    </div>
+  </div>
+</section>
+
+
+<nav class="bg-white px-8 pt-2 shadow-md">
+  <div class="-mb-px flex justify-center">
+
+
+    <!-- POPULAR -->
+    {% if type == "popular" %}
+    <a
+      class="no-underline text-teal-dark border-b-2 border-teal-dark uppercase tracking-wide font-bold text-xs py-3 mr-8">
+      <i class="fas fa-fire-alt"></i> Popular
+    </a>
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3 mr-8"
+      href="/movies/playing">
+      <i class="fas fa-play"></i> Now Playing
+    </a>
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3 mr-8"
+      href="/movies/upcoming">
+      <i class="fas fa-calendar-alt"></i> Upcoming
+    </a>
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3"
+      href="/movies/top">
+      <i class="fas fa-ribbon"></i> Top Rated
+    </a>
+
+
+    <!-- NOW PLAYING -->
+    {% elif type == "playing" %}
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3 mr-8"
+      href="/">
+      <i class="fas fa-fire-alt"></i> Popular
+    </a>
+    <a
+      class="no-underline text-teal-dark border-b-2 border-teal-dark uppercase tracking-wide font-bold text-xs py-3 mr-8">
+      <i class="fas fa-play"></i> Now Playing
+    </a>
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3 mr-8"
+      href="/movies/upcoming">
+      <i class="fas fa-calendar-alt"></i> Upcoming
+    </a>
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3"
+      href="/movies/top">
+      <i class="fas fa-ribbon"></i> Top Rated
+    </a>
+
+
+    <!-- UPCOMING -->
+    {% elif type == "upcoming" %}
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3 mr-8"
+      href="/">
+      <i class="fas fa-fire-alt"></i> Popular
+    </a>
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3 mr-8"
+      href="/movies/playing">
+      <i class="fas fa-play"></i> Now Playing
+    </a>
+    <a
+      class="no-underline text-teal-dark border-b-2 border-teal-dark uppercase tracking-wide font-bold text-xs py-3 mr-8">
+      <i class="fas fa-calendar-alt"></i> Upcoming
+    </a>
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3"
+      href="/movies/top">
+      <i class="fas fa-ribbon"></i> Top Rated
+    </a>
+
+
+    <!-- TOP RATED -->
+    {% else %}
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3 mr-8"
+      href="/">
+      <i class="fas fa-fire-alt"></i> Popular
+    </a>
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3 mr-8"
+      href="/movies/playing">
+      <i class="fas fa-play"></i> Now Playing
+    </a>
+    <a class="no-underline text-grey-dark border-b-2 border-transparent uppercase tracking-wide font-bold text-xs py-3 mr-8"
+      href="/movies/upcoming">
+      <i class="fas fa-calendar-alt"></i> Upcoming
+    </a>
+    <a
+      class="no-underline text-teal-dark border-b-2 border-teal-dark uppercase tracking-wide font-bold text-xs py-3 mr-8">
+      <i class="fas fa-ribbon"></i> Top Rated
+    </a>
+
+    {% endif %}
+  </div>
+</nav>
+
+
+
+
+<section class="text-gray-700 body-font">
+  <div class="container px-5 py-10 mx-auto">
+    <div class="flex flex-wrap -m-4">
+
+      {% for movie in moviesList %}
+      <div class="lg:w-1/5 md:w-1/2 w-full rounded">
+
+        <div class="m-3 rounded" style="background-color: #101820;" id="display-box">
+
+          {% if movie.poster_path == null %}
+          <a class="block relative h-90 rounded overflow-hidden" href="/movie/id={{movie.id}}">
+            <img alt="{{movie.title}}" class="object-cover object-center w-full h-full block"
+              src="{% static 'Icons/error.jpg' %}">
+
+          {% else %}
+          <a class="block relative h-90 rounded overflow-hidden" href="/movie/id={{movie.id}}">
+            <img alt="{{movie.title}}" class="object-cover object-center w-full h-full block"
+              src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}">
+          </a>
+          {% endif %}
+          <div class="mt-4 pl-4 pb-4">
+            <h2 class="text-gray-900 title-font text-lg font-medium"
+              style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; color: white;">
+              {{movie.title}}</h2>
+            <p class="mt-1" style="color: #FEE715;">{{movie.release_date}}</p>
+          </div>
+
+        </div>
+
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+<script>
+  function Search()
+  {
+    let value = document.getElementById("search").value
+    if(value!="")
+      location.href = "/movie/keyword=" + value; 
+  }
+</script>
+
+{% endblock %}

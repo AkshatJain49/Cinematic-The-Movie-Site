@@ -1,0 +1,192 @@
+{% extends 'Base.html' %}
+{% block content %}
+{% load static %}
+
+<section class="text-gray-700 body-font overflow-hidden">
+    <div class="container px-5 py-20 mx-auto">
+        <div class="lg:w-4/5 mx-auto flex flex-wrap">
+
+            {% if information.profile_path == null %}
+            <img alt="Poster" class="object-cover object-center rounded"
+                src="{% static 'Icons/error.jpg' %}" style="width: 15rem; height: 23rem;">
+            
+            {% else %}
+            <img alt="Poster" class="object-cover object-center rounded"
+                src="https://image.tmdb.org/t/p/w500/{{information.profile_path}}" style="width: 15rem; height: 23rem;">
+            
+            {% endif %}
+            <div class="lg:w-3/4 w-full lg:pl-10 lg:py-6 mb-6 lg:mb-0">
+
+                <h1 class="text-gray-900 text-3xl title-font font-medium mb-4">{{information.name}}</h1>
+
+                <div class="flex mb-4">
+                    <a class="flex-grow text-indigo-500 border-b-2 border-indigo-500 py-2 text-lg px-1" id="overview"
+                        onclick="displayProperties('Overview')" style="cursor: pointer;">Overview</a>
+                    <a class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1" id="movie"
+                        onclick="displayProperties('Movies')" style="cursor: pointer;">Movies</a>
+                    <a class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1" id="shows"
+                        onclick="displayProperties('Shows')" style="cursor: pointer;">TV Shows</a>
+                </div>
+
+                <!-- OVERVIEW -->
+                <div class="leading-relaxed mb-4" id="pOverview">
+
+                    <div class="p-4 rounded" style="background-color: #E8E8E8; font-size: medium;">
+
+                        <span>Birth Date: </span><span style="color: #101820;">{{information.birthday}}</span><br>
+                        <span>Place of Birth: </span><span style="color: #101820;">{{information.place_of_birth}}
+                            minutes</span><br>
+                        <span>Popularity: </span><span style="color: #101820;">{{information.popularity}}</span><br>
+
+                    </div>
+                    <br>
+                    <p>{{information.biography}}</p>
+
+                </div>
+
+                <!-- MOVIES -->
+                <div class="leading-relaxed mb-4" id="pMovies" style="display: none;">
+                    <section class="text-gray-700 body-font">
+                        <div class="container px-5 py-10 mx-auto">
+                            <div class="flex flex-wrap -m-4">
+
+                                {% for movie in moviesList %}
+
+                                <div class="lg:w-1/4 md:w-1/2 w-full rounded">
+
+                                    <div class="m-3 rounded" style="background-color: #101820;" id="display-box">
+
+                                        <a class="block relative h-90 rounded overflow-hidden"
+                                            href="/movie/id={{movie.id}}">
+
+                                            {% if movie.poster_path == null %}
+                                            <img alt="{{movie.title}}"
+                                                class="object-cover object-center w-full h-full block"
+                                                src="{% static 'Icons/error.jpg' %}">
+
+                                            {% else %}
+                                            <img alt="{{movie.title}}"
+                                                class="object-cover object-center w-full h-full block"
+                                                src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}">
+
+                                            {% endif %}
+                                        </a>
+
+                                        <div class="mt-4 pl-4 pb-4">
+                                            <h3
+                                                style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; color: white;">
+                                                {{movie.title}}</h3>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+
+                <!-- TV SHOWS -->
+                <div class="leading-relaxed mb-4" id="pShows" style="display: none;">
+                    <section class="text-gray-700 body-font">
+                        <div class="container px-5 py-10 mx-auto">
+                            <div class="flex flex-wrap -m-4">
+
+                                {% for show in showsList %}
+
+                                <div class="lg:w-1/4 md:w-1/2 w-full rounded">
+
+                                    <div class="m-3 rounded" style="background-color: #101820;" id="display-box">
+
+                                        <a class="block relative h-90 rounded overflow-hidden"
+                                            href="/tv/id={{show.id}}">
+
+                                            {% if show.poster_path == null %}
+                                            <img alt="{{show.title}}"
+                                                class="object-cover object-center w-full h-full block"
+                                                src="{% static 'Icons/error.jpg' %}">
+
+                                            {% else %}
+                                            <img alt="{{show.title}}"
+                                                class="object-cover object-center w-full h-full block"
+                                                src="https://image.tmdb.org/t/p/w500/{{show.poster_path}}">
+
+                                            {% endif %}
+                                        </a>
+
+                                        <div class="mt-4 pl-4 pb-4">
+                                            <h3
+                                                style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; color: white;">
+                                                {{show.name}}</h3>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<script>
+    document.getElementById("people").style.color = "white";
+    document.getElementById("tv").style.color = "";
+    document.getElementById("movies").style.color = "";
+
+    function displayProperties(detail) {
+        var classInactive = "flex-grow border-b-2 border-gray-300 py-2 text-lg px-1";
+        var classActive = "flex-grow text-indigo-500 border-b-2 border-indigo-500 py-2 text-lg px-1"
+
+        var aOverview = document.getElementById("overview");
+        var aMovies = document.getElementById("movie");
+        var aShows = document.getElementById("shows");
+
+        var pOverview = document.getElementById("pOverview");
+        var pMovies = document.getElementById("pMovies");
+        var pShows = document.getElementById("pShows");
+
+        if (detail == "Overview") {
+            aOverview.className = classActive;
+            aMovies.className = classInactive;
+            aShows.className = classInactive;
+
+            pOverview.style.display = "block";
+            pMovies.style.display = "none";
+            pShows.style.display = "none";
+        }
+
+        else if (detail == "Movies") {
+            aOverview.className = classInactive;
+            aMovies.className = classActive;
+            aShows.className = classInactive;
+
+            pOverview.style.display = "none";
+            pMovies.style.display = "block";
+            pShows.style.display = "none";
+        }
+
+        else {
+            aOverview.className = classInactive;
+            aMovies.className = classInactive;
+            aShows.className = classActive;
+
+            pOverview.style.display = "none";
+            pMovies.style.display = "none";
+            pShows.style.display = "block";
+        }
+    }
+</script>
+
+{% endblock %}

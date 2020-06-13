@@ -1,0 +1,49 @@
+{% extends 'Base.html' %}
+{% block content %}
+{% load static %}
+
+
+<section class="text-gray-700 body-font">
+  <div class="container px-5 py-10 mx-auto">
+    <div class="flex flex-wrap -m-4">
+
+      {% for person in peopleList %}
+      <div class="lg:w-1/5 md:w-1/2 w-full rounded">
+
+        <div class="m-3 rounded" style="background-color: #101820;" id="display-box">
+
+          <a class="block relative h-90 rounded overflow-hidden" href="/detail/people/id={{person.id}}">
+
+            {% if person.profile_path == null %}
+            <img alt="{{person.title}}" class="object-cover object-center w-full h-full block"
+              src="{% static 'Icons/error.jpg' %}">
+
+            {% else %}
+            <img alt="{{person.title}}" class="object-cover object-center w-full h-full block"
+              src="https://image.tmdb.org/t/p/w500/{{person.profile_path}}">
+
+            {% endif %}
+
+          </a>
+          <div class="mt-4 pl-4 pb-4">
+            <h2 class="text-gray-900 title-font text-lg font-medium"
+              style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; color: white;">
+              {{person.name}}</h2>
+          </div>
+
+        </div>
+
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+
+<script>
+    document.getElementById("people").style.color = "white";
+    document.getElementById("movies").style.color = "";
+    document.getElementById("tv").style.color = "";
+</script>
+{% endblock %}
