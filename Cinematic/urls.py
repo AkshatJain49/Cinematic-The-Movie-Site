@@ -32,5 +32,7 @@ urlpatterns = [
     path('people', views.People),
     path('<str:type>/id=<str:id>', views.Details),
     path('<str:type>/keyword=<str:key>', views.Search),
-    path('detail/people/id=<str:id>', views.PeopleDetails)
+    path('detail/people/id=<str:id>', views.PeopleDetails),
+
+    path('speech', views.SpeechRecognition)
 ]

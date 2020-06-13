@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import json
 import requests
+import pyttsx3
+import speech_recognition as sr
 
 def MoviesPopular(request):
     try:
@@ -195,3 +197,32 @@ def PeopleDetails(request, id):
 
     binddata = {"information" : resultDetails, "moviesList" : moviesList, "showsList" : showsList}
     return render(request, 'PeopleDetails.html', binddata)
+
+
+
+def SpeechRecognition(request):
+    engine = pyttsx3.init('sapi5')
+    voices = engine.getProperty('voices')
+    engine.setProperty('voice', voices[0].id)
+
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+        r.adjust_for_ambient_noise(source, duration=0.2)
+        audio = r.listen(source)
+
+    try:
+        print("Recognising")
+        query = r.recognize_google(audio)
+        engine.say("You Searched For " + query)
+        engine.runAndWait()
+        print("USER SAID: ", query)
+        
+
+    except:
+        engine.say("Unable to Recognize")
+        engine.runAndWait()
+        print("Say that Again")
+        query = "None"
+
+    return HttpResponse(query)

@@ -10,7 +10,8 @@
       <h2 class="sm:text-3xl text-2xl font-small title-font text-base">Lots of movies, TV shows and people to discover. Explore now.</p>
     </div>
     <div class="flex lg:w-2/3 w-full sm:flex-row flex-col mx-auto px-8 sm:px-0">
-      <input class="flex-grow w-full bg-gray-800 rounded border border-gray-700 text-white focus:outline-none focus:border-indigo-500 text-base px-4 py-2 mr-4 mb-4 sm:mb-0" placeholder="Enter Movie Title" type="search" id="search">
+      <input class="flex-grow w-full bg-gray-800 rounded border border-gray-700 text-white focus:outline-none focus:border-indigo-500 text-base px-4 py-2 mr-2 mb-4 sm:mb-0" placeholder="Enter Movie Title" type="search" id="search">
+      <button class="mr-2 border-0 py-2 px-4 focus:outline-none rounded text-lg" onclick="VoiceMode()"><i class="fas fa-microphone-alt"></i></button>
       <button class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" onclick="Search()">Search</button>
     </div>
   </div>
@@ -144,12 +145,41 @@
 </section>
 
 <script>
+  var inputSearch = document.getElementById("search");
   function Search()
   {
-    let value = document.getElementById("search").value
+    let value = inputSearch.value
     if(value!="")
       location.href = "/movie/keyword=" + value; 
   }
+
+  function VoiceMode()
+  {
+    inputSearch.value = "";
+    inputSearch.placeholder = "Listening...";
+
+    xhr = new XMLHttpRequest();
+    xhr.open("GET", "/speech");
+    xhr.send();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4) {
+          data = xhr.responseText;
+          
+          if (data.localeCompare("None") != 0) {
+            inputSearch.value = data;
+            location.href = "/movie/keyword=" + data;
+          
+          }
+          else {
+            inputSearch.value = "";
+            inputSearch.placeholder = "Enter Movie Title";
+
+          }
+          
+      }//IF ENDS
+    }//XHR FUNCTION ENDS
+  }//IF ENDS
+
 </script>
 
 {% endblock %}
